@@ -28,14 +28,16 @@ print 'Calculating Euler Bricks from ' + str(min) + ' to ' + str(max) + ':\n'
 for a in range(min, max):
     for b in range(a, max):
         for c in range(b, max):
-            # Calculate diagonal lengths
-            ab = diagonal(a, b)
-            ac = diagonal(a, c)
-            bc = diagonal(b, c)
-            # Test integer-ness of each diagonal length
-            if isInteger(ab) and isInteger(ac) and isInteger(bc):
-                # Make sure GCD(a,b,c) = 1 (primitive)
-                if GCD(a, b, c) == 1:
-                    # Print the side lengths and diagonal lengths if so
-                    print str(a) + '   ' + str(b) + '   ' + str(c) + '    :   ' + str(ab) + '   ' + str(ac) + '   ' + str(bc)
+            # At least one side must be odd
+            if a % 2 == 0 or b % 2 == 0 or c % 2 == 0:
+                # Calculate diagonal lengths
+                ab = diagonal(a, b)
+                ac = diagonal(a, c)
+                bc = diagonal(b, c)
+                # Test integer-ness of each diagonal length
+                if isInteger(ab) and isInteger(ac) and isInteger(bc):
+                    # Make sure GCD(a,b,c) = 1 (primitive)
+                    if GCD(a, b, c) == 1:
+                        # Print the side lengths and diagonal lengths if so
+                        print str(a) + '   ' + str(b) + '   ' + str(c) + '    :   ' + str(ab) + '   ' + str(ac) + '   ' + str(bc)
 
