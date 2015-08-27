@@ -8,5 +8,7 @@ Aside from simply enjoying math and the idea of Euler Bricks, I want to be able 
 
 ## Things to do:
 1. Number-theoretical constraints
+  1. See convex hull (Newton polygon) constraint on coordinate plane of polynomial of two variables
+  	+ (A Strategy of Numeric Search For Perfect Cuboids in the Case of the Second Cuboid Conjecture)[http://arxiv.org/pdf/1504.07161v1.pdf] Masharov, Sharipov
 2. Addition of new bricks to a SQL database
 3. Useful entry viewing and sorting (PHP?)
