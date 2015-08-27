@@ -3,6 +3,7 @@
 
 import math
 from fractions import gcd
+import time
 
 # Find the diagonal length given each side
 def diagonal(side1, side2):
@@ -19,25 +20,45 @@ def isInteger(number):
 def GCD(x, y, z):
     return gcd(gcd(x, y), z)
 
-min = 1
-max = 1000
+# Test for number-theoretical constraints
+def constrain(x, y, z):
+    # One side must be odd
+    if x % 2 == 0 or y % 2 == 0 or z % 2 == 0:
+        return True
+    else:
+        return False
 
-print 'Calculating Euler Bricks from ' + str(min) + ' to ' + str(max) + ':\n'
-
+# Number of triplets examined (before constraints)
+number = 0
+    
 # Iterate over all combinations a <= b <= c
-for a in range(min, max):
-    for b in range(a, max):
-        for c in range(b, max):
-            # At least one side must be odd
-            if a % 2 == 0 or b % 2 == 0 or c % 2 == 0:
-                # Calculate diagonal lengths
-                ab = diagonal(a, b)
-                ac = diagonal(a, c)
-                bc = diagonal(b, c)
-                # Test integer-ness of each diagonal length
-                if isInteger(ab) and isInteger(ac) and isInteger(bc):
-                    # Make sure GCD(a,b,c) = 1 (primitive)
-                    if GCD(a, b, c) == 1:
-                        # Print the side lengths and diagonal lengths if so
-                        print str(a) + '   ' + str(b) + '   ' + str(c) + '    :   ' + str(ab) + '   ' + str(ac) + '   ' + str(bc)
+def search(min, max):
+    global number
+    for a in range(min, max):
+        for b in range(a, max):
+            for c in range(b, max):
+                number += 1
+                # Constraints
+                if constrain(a, b, c):
+                    # Calculate diagonal lengths
+                    ab = diagonal(a, b)
+                    ac = diagonal(a, c)
+                    bc = diagonal(b, c)
+                    # Test integer-ness of each diagonal length
+                    if isInteger(ab) and isInteger(ac) and isInteger(bc):
+                        # Make sure GCD(a,b,c) = 1 (primitive)
+                        if GCD(a, b, c) == 1:
+                            # Print the side lengths and diagonal lengths if so
+                            print str(a) + '   ' + str(b) + '   ' + str(c) + '    :   ' + str(ab) + '   ' + str(ac) + '   ' + str(bc)
 
+minimum = 1
+maximum = 1000
+
+print 'Calculating Euler Bricks from ' + str(minimum) + ' to ' + str(maximum) + ':\n'
+t0 = time.clock()
+search(minimum, maximum)
+t1 = time.clock()
+total = t1 - t0
+print '\nEfficiency:'
+print str(number) + ' triplets examined over ' + str(total) + ' seconds.'
+print str(number/total) + ' triplets examined per second.'
