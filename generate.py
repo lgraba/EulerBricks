@@ -1,9 +1,12 @@
 # test.py
-# A simple program to find primitive Euler Bricks and, if it exists, a perfect cuboid among those Euler Bricks
+# A simple program to find primitive Euler Bricks and, if it exists, a perfect cuboid among those Euler Bricks,
+# then insert found Euler Bricks into database.
+# Note: This is very inefficient - Object orientation, clean up, and convention compliance necessary in the future
 
 import math
 from fractions import gcd
 import time
+import insert
 
 # Find the diagonal length given each side
 def diagonal(side1, side2):
@@ -62,21 +65,33 @@ def search(min, max):
                 if isInteger(ab) and isInteger(ac) and isInteger(bc):
                     # Make sure GCD(a,b,c) = 1 (primitive)
                     if GCD(a, b, c) == 1:
+                        # Insert brick into database
+                        insert.addBrick(a, b, c, ab, ac, bc)
                         # Check for perfect cuboid if number theory constraints are satisfied
                         if constrain(a, b, c):
                             if isInteger(diagonal(diagonal(a, b), c)):
-                                print 'PERFECT CUBOID FOUND: '
+                                insert.addPerfect(a, b, c, abc)
+                                print ('PERFECT CUBOID FOUND: ')
                         # Print the side lengths and diagonal lengths if so
-                        print str(a) + '   ' + str(b) + '   ' + str(c) + '    :   ' + str(ab) + '   ' + str(ac) + '   ' + str(bc)
+                        print (str(a) + '   ' + str(b) + '   ' + str(c) + '    :   ' + str(ab) + '   ' + str(ac) + '   ' + str(bc))
 
 minimum = 1
-maximum = 1000
+maximum = 1000000
 
-print 'Calculating Euler Bricks from ' + str(minimum) + ' to ' + str(maximum) + ':\n'
+print ('Calculating Euler Bricks from ' + str(minimum) + ' to ' + str(maximum) + ':\n')
+
 t0 = time.clock()
+
+# Execute search from minimum to maximum
 search(minimum, maximum)
+
+# Record and calculate time elapsed
 t1 = time.clock()
 total = t1 - t0
-print '\nEfficiency:'
-print '%.2e' % number + ' triplets examined over ' + str(total) + ' seconds.'
-print '%.3e' % (number/total) + ' triplets examined per second.'
+
+# Add stats to database
+insert.addStats(total, maximum)
+
+print ('\nEfficiency:')
+print ('%.2e' % number + ' triplets examined over ' + str(total) + ' seconds.')
+print ('%.3e' % (number/total) + ' triplets examined per second.')
