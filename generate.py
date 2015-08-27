@@ -1,5 +1,5 @@
 # test.py
-# A simple program to find primitive Euler Bricks
+# A simple program to find primitive Euler Bricks and, if it exists, a perfect cuboid among those Euler Bricks
 
 import math
 from fractions import gcd
@@ -20,11 +20,27 @@ def isInteger(number):
 def GCD(x, y, z):
     return gcd(gcd(x, y), z)
 
-# Test for number-theoretical constraints
+# Test for number-theoretical constraints for Perfect Cuboid
 def constrain(x, y, z):
     # One side must be odd
-    if x % 2 == 0 or y % 2 == 0 or z % 2 == 0:
-        return True
+    if ((x % 2) - 1) == 0 or ((y % 2) - 1) == 0 or ((z % 2) - 1) == 0:
+        # One side must have length divisible by 5
+        if x % 5 == 0 or y % 5 == 0 or z % 5 == 0:
+            # One side must have length divisible by 7
+            if x % 7 == 0 or y % 7 == 0 or z % 7 == 0:
+                # One side must have length divisible by 11
+                if x % 11 == 0 or y % 11 == 0 or z % 11 == 0:
+                    # One side must have length divisible by 19
+                    if x % 19 == 0 or y % 19 == 0 or z % 19 == 0:
+                        return True
+                    else:
+                        return False
+                else:
+                    return False
+            else:
+                return False
+        else:
+            return False
     else:
         return False
 
@@ -38,18 +54,20 @@ def search(min, max):
         for b in range(a, max):
             for c in range(b, max):
                 number += 1
-                # Constraints
-                if constrain(a, b, c):
-                    # Calculate diagonal lengths
-                    ab = diagonal(a, b)
-                    ac = diagonal(a, c)
-                    bc = diagonal(b, c)
-                    # Test integer-ness of each diagonal length
-                    if isInteger(ab) and isInteger(ac) and isInteger(bc):
-                        # Make sure GCD(a,b,c) = 1 (primitive)
-                        if GCD(a, b, c) == 1:
-                            # Print the side lengths and diagonal lengths if so
-                            print str(a) + '   ' + str(b) + '   ' + str(c) + '    :   ' + str(ab) + '   ' + str(ac) + '   ' + str(bc)
+                # Calculate diagonal lengths
+                ab = diagonal(a, b)
+                ac = diagonal(a, c)
+                bc = diagonal(b, c)
+                # Test integer-ness of each diagonal length
+                if isInteger(ab) and isInteger(ac) and isInteger(bc):
+                    # Make sure GCD(a,b,c) = 1 (primitive)
+                    if GCD(a, b, c) == 1:
+                        # Check for perfect cuboid if number theory constraints are satisfied
+                        if constrain(a, b, c):
+                            if isInteger(diagonal(diagonal(a, b), c)):
+                                print 'PERFECT CUBOID FOUND: '
+                        # Print the side lengths and diagonal lengths if so
+                        print str(a) + '   ' + str(b) + '   ' + str(c) + '    :   ' + str(ab) + '   ' + str(ac) + '   ' + str(bc)
 
 minimum = 1
 maximum = 1000
@@ -60,5 +78,5 @@ search(minimum, maximum)
 t1 = time.clock()
 total = t1 - t0
 print '\nEfficiency:'
-print str(number) + ' triplets examined over ' + str(total) + ' seconds.'
-print str(number/total) + ' triplets examined per second.'
+print '%.2e' % number + ' triplets examined over ' + str(total) + ' seconds.'
+print '%.3e' % (number/total) + ' triplets examined per second.'
